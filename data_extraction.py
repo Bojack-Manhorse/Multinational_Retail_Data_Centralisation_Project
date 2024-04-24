@@ -45,7 +45,7 @@ class DataExtractor:
     def extract_from_s3(self, s3_address):
         s3 = boto3.client('s3')
         list = s3_address.split('/')
-        #s3.download_file(list[2], list[3], list[3])
+        s3.download_file(list[2], list[3], list[3])
         return pd.read_csv(list[3])
     
     def read_json(self, link):
@@ -58,9 +58,9 @@ my_hoover = data_cleaning.DataCleaning()
 def upload_user_data():
     df_raw = my_extractor.read_rds_table(my_connection, 'legacy_users')
     df_cleaned = my_hoover.clean_user_data(df_raw)
-    my_connection.upload_to_db(df_cleaned, 'dim_user_data', local_database_creds)
+    my_connection.upload_to_db(df_cleaned, 'dim_users', local_database_creds)
 
-#upload_user_data()
+upload_user_data()
 
 def upload_card_data():
     pdf_link = 'https://data-handling-public.s3.eu-west-1.amazonaws.com/card_details.pdf'
@@ -84,7 +84,8 @@ def upload_store_data():
 def upload_product_data():
     bucket_address = 's3://data-handling-public/products.csv'
     df_raw = my_extractor.extract_from_s3(bucket_address)
-    df_cleaned = my_hoover.clean_products_data(df_raw)
+    df_weights_fixed = my_hoover.convert_product_weights(df_raw)
+    df_cleaned = my_hoover.clean_products_data(df_weights_fixed)
     my_connection.upload_to_db(df_cleaned, 'dim_products', local_database_creds)
 
 #upload_product_data()
@@ -102,6 +103,15 @@ def upload_events_data():
     df_cleaned = my_hoover.clean_event_data(df_raw)
     my_connection.upload_to_db(df_cleaned, 'dim_date_times', local_database_creds)
 
-upload_events_data()
+#upload_events_data()
 
-#my_connection.list_db_tables(external_database_creds)
+def all_function():
+    upload_user_data()
+    upload_card_data()
+    upload_store_data()
+    upload_product_data()
+    upload_order_data()
+    upload_events_data()
+
+#all_function()
+    
