@@ -1,7 +1,6 @@
-import yaml
-import psycopg2
 from sqlalchemy import create_engine
 from sqlalchemy import inspect
+import yaml
 
 class DatabaseConnector:
     """

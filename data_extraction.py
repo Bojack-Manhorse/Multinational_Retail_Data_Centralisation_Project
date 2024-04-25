@@ -1,9 +1,9 @@
-import pandas as pd
+import boto3
 import data_cleaning
 import database_utils
-import boto3
-import tabula
+import pandas as pd
 import requests
+import tabula
 
 local_database_creds = "local_db_creds.yaml"
 external_database_creds = "db_creds.yaml"
@@ -34,7 +34,6 @@ class DataExtractor:
         """
             Uses 'list_number_of_stores' to retrieve data from all stores.
         """
-        print(link_1)
         number_of_stores = self.list_number_of_stores(link_1, header).json()['number_stores']
         list_of_stores = []
         for i in range(0,number_of_stores):
@@ -43,6 +42,9 @@ class DataExtractor:
         return output
     
     def extract_from_s3(self, s3_address):
+        """
+            Extracts a dataframe from a csv in an s3 Bucket from s3_address
+        """
         s3 = boto3.client('s3')
         list = s3_address.split('/')
         s3.download_file(list[2], list[3], list[3])
@@ -74,7 +76,6 @@ def upload_store_data():
     number_of_stores_link = 'https://aqj7u5id95.execute-api.eu-west-1.amazonaws.com/prod/number_stores'
     store_data_link = 'https://aqj7u5id95.execute-api.eu-west-1.amazonaws.com/prod/store_details/'
     authentication_header = {'x-api-key':'yFBQbwXe9J3sd6zWVAMrK6lcxxr0q1lr2PT6DDMX'}
-    print(my_extractor.list_number_of_stores(number_of_stores_link, authentication_header))
     df_raw = my_extractor.retrieve_stores_data(number_of_stores_link, store_data_link, authentication_header)
     df_cleaned = my_hoover.clean_store_data(df_raw)
     my_connection.upload_to_db(df_cleaned, 'dim_store_details', local_database_creds)
@@ -103,9 +104,9 @@ def upload_events_data():
     df_cleaned = my_hoover.clean_event_data(df_raw)
     my_connection.upload_to_db(df_cleaned, 'dim_date_times', local_database_creds)
 
-upload_events_data()
+#upload_events_data()
 
-def all_function():
+def all_functions():
     upload_user_data()
     upload_card_data()
     upload_store_data()
@@ -113,5 +114,5 @@ def all_function():
     upload_order_data()
     upload_events_data()
 
-#all_function()
+all_functions()
     

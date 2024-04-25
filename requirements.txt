@@ -1,0 +1,8 @@
+boto3==1.26.155
+numpy==1.23.5
+pandas==1.5.3
+PyYAML==6.0
+PyYAML==6.0.1
+Requests==2.31.0
+SQLAlchemy==1.4.52
+tabula_py==2.9.0
