@@ -126,9 +126,16 @@ class DataCleaning:
     
     def clean_event_data(self, df_input):
         df = df_input
-        df['month'] = pd.to_numeric(df['month'], errors='coerce')
-        df['year'] = pd.to_numeric(df['year'], errors='coerce')
-        df['day'] = pd.to_numeric(df['day'], errors='coerce')
+        def pad_with_zeroes(string:str):
+            try:
+                if len(string) == 1:
+                    return "0" + string
+                else:
+                    return string
+            except TypeError:
+                pass
+        for i in ['month', 'day', 'year']:
+            df[i] = df[i].map(lambda string: pad_with_zeroes(string))
         df['timestamp'] = pd.to_datetime(df['timestamp'], errors='coerce', format="%H:%M:%S")
         df['timestamp'] = df['timestamp'].dt.time
         def check_if_length_is_36(string):

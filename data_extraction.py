@@ -60,7 +60,7 @@ def upload_user_data():
     df_cleaned = my_hoover.clean_user_data(df_raw)
     my_connection.upload_to_db(df_cleaned, 'dim_users', local_database_creds)
 
-upload_user_data()
+#upload_user_data()
 
 def upload_card_data():
     pdf_link = 'https://data-handling-public.s3.eu-west-1.amazonaws.com/card_details.pdf'
@@ -103,7 +103,7 @@ def upload_events_data():
     df_cleaned = my_hoover.clean_event_data(df_raw)
     my_connection.upload_to_db(df_cleaned, 'dim_date_times', local_database_creds)
 
-#upload_events_data()
+upload_events_data()
 
 def all_function():
     upload_user_data()
