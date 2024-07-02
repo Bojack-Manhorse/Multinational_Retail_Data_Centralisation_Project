@@ -50,6 +50,16 @@ The file structure should look like this:
 
 Run `python3 data_extraction.py` in the terminal.
 
+## Project Stucture
+
+The bulk of the project in in the scripts `data_cleaing.py`, `data_extraction.py` and `database_untils.py`.
+
+- `data_cleaing.py` contians a class whose methods perform cleaning on all the possible datasets we encounter in the project.
+- `data_extraction.py` contains a class containing methods to extract data from various different sources,
+- `database_untils.py` contains a class which establishes connections using SQLAlchemy to various databases.
+
+The file `main.py` contains instances of the classes in the above files and created the database on our local SQL server.
+
 ## Packages used
 
 - `boto3`

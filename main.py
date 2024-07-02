@@ -66,4 +66,4 @@ def all_functions():
     upload_order_data()
     upload_events_data()
 
-#all_functions()
+all_functions()
