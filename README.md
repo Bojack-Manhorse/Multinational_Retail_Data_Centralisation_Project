@@ -14,7 +14,7 @@ The sources we extract data from include the following:
 
 ### Installation
 
-First ensure python is installed on your system, along with java (to run tabula).
+First ensure python is installed on your system, along with java (to run the tabula package).
 
 To clone the repository, run the following in a terminal:
 
@@ -44,21 +44,39 @@ Within the project directory, create two files called
 
 The file structure should look like this:
 
-![image_of_file_structure](image_of_file_structure.png)
+![image_of_file_structure](readme_images/image_of_file_structure.png)
 
 ### Usage
 
-Run `python3 data_extraction.py` in the terminal.
+Run `python3 main.py` in the terminal.
 
-## Project Stucture
+## Project Description
+
+### File Stucture
 
 The bulk of the project in in the scripts `data_cleaing.py`, `data_extraction.py` and `database_untils.py`.
 
 - `data_cleaing.py` contians a class whose methods perform cleaning on all the possible datasets we encounter in the project.
 - `data_extraction.py` contains a class containing methods to extract data from various different sources,
-- `database_untils.py` contains a class which establishes connections using SQLAlchemy to various databases.
+- `database_utils.py` contains a class which establishes connections using SQLAlchemy to various databases.
 
 The file `main.py` contains instances of the classes in the above files and created the database on our local SQL server.
+
+### Proccessing Pipeline
+
+We first extract a database from its respective source using a method from the `DataExtractor` class within `data_extraction.py`.
+
+![image](readme_images/Extractor.png)
+
+For example, if we wish to extract from an RDS Database, we'd use the method `read_rds_table`, and pass the RDS connection and the table name we wish to extract as arguments, then the function will return the table as a pandas dataframe.
+
+We then clean the dataset using the `DataCleaning` of `data_cleaning.py`. For example, if we'd like to clean the user data table, we would set the birth dates and 'join_date' to the correct dateime format, put the phone number into a standard format and makes sure all e-mail addresses are valid.
+
+![image](readme_images/Cleaning.png)
+
+Finally we'd use the `upload_to_db` method of `DatabaseConnector` in `database_utils.py` to upload the dataframe to our SQL database.
+
+![image](readme_images/PgAdmin.png)
 
 ## Packages used
 
